@@ -16,7 +16,6 @@ function App() {
     setNickname(nickname);
   };
 
-  // Wrapper component to extract boardId from URL parameters
   const DrawingBoardWrapper = () => {
     const { id: boardId } = useParams();
     return <DrawingBoard boardId={boardId} />;
