@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useParams,
+} from "react-router-dom";
+import Login from "./components/Login";
+import BoardList from "./components/BoardList";
+import DrawingBoard from "./components/DrawingBoard";
 
 function App() {
+  const [nickname, setNickname] = useState("");
+
+  const handleLogin = (nickname) => {
+    setNickname(nickname);
+  };
+
+  // Wrapper component to extract boardId from URL parameters
+  const DrawingBoardWrapper = () => {
+    const { id: boardId } = useParams();
+    return <DrawingBoard boardId={boardId} />;
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login onLogin={handleLogin} />} />
+        <Route path="/boards" element={<BoardList nickname={nickname} />} />
+        <Route path="/board/:id" element={<DrawingBoardWrapper />} />
+      </Routes>
+    </Router>
   );
 }
 
