@@ -18,7 +18,7 @@ const DrawingBoard = ({ boardId }) => {
   const [currentBackgroundColor, setCurrentBackgroundColor] = useState("white");
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:3000");
+    socketRef.current = io("https://itransition-task6-backend.onrender.com");
     return () => {
       socketRef.current.disconnect();
     };
@@ -32,9 +32,8 @@ const DrawingBoard = ({ boardId }) => {
 
   const fetchBoardAndDrawings = async (boardId) => {
     try {
-      const response = await fetch(`http://localhost:3000/drawings/${boardId}`);
+      const response = await fetch(`https://itransition-task6-backend.onrender.com/drawings/${boardId}`);
       const drawings = await response.json();
-      // Update the canvas with the fetched drawings
       drawings.forEach(drawLine);
     } catch (error) {
       console.error("Error fetching drawings:", error);
@@ -45,7 +44,6 @@ const drawLine = ({ x1, y1, x2, y2, color, tool }) => {
   const canvas = canvasRef.current;
   const context = canvas.getContext("2d");
 
-  // Set the correct globalCompositeOperation based on the tool being used
   context.globalCompositeOperation =
     tool === "eraser" ? "destination-out" : "source-over";
 
@@ -87,7 +85,6 @@ const draw = (e) => {
   const y = e.clientY - rect.top;
   const context = canvasRef.current.getContext("2d");
 
-  // Set the correct globalCompositeOperation based on the tool being used
   context.globalCompositeOperation =
     tool === "eraser" ? "destination-out" : "source-over";
 
@@ -98,14 +95,13 @@ const draw = (e) => {
   context.lineTo(x, y);
   context.stroke();
 
-  // Send the drawing data to the backend
   debounceUpdateDrawing({
     boardId,
     x1: lastPosition.x,
     y1: lastPosition.y,
     x2: x,
     y2: y,
-    color: tool === "eraser" ? "white" : color, // send white as color if erasing
+    color: tool === "eraser" ? "white" : color,
     tool,
   });
 
@@ -116,7 +112,7 @@ const draw = (e) => {
   const debounceUpdateDrawing = useCallback(
     debounce((drawing) => {
       socketRef.current.emit("draw", drawing);
-    }, 10), // Adjust debounce time as needed
+    }, 10),
     []
   );
 

@@ -7,7 +7,7 @@ const BoardList = ({ nickname }) => {
   const [boards, setBoards] = useState([]);
   const [editingBoardId, setEditingBoardId] = useState(null);
   const [newBoardName, setNewBoardName] = useState("");
-  const navigate = useNavigate(); // Use navigate to programmatically change routes
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchBoards();
@@ -15,7 +15,7 @@ const BoardList = ({ nickname }) => {
 
   const fetchBoards = async () => {
     try {
-      const response = await fetch("http://localhost:3000/boards");
+      const response = await fetch("https://itransition-task6-backend.onrender.com/boards");
       const data = await response.json();
       setBoards(data);
     } catch (error) {
@@ -25,7 +25,7 @@ const BoardList = ({ nickname }) => {
 
   const addBoard = async () => {
     try {
-      const response = await fetch("http://localhost:3000/boards", {
+      const response = await fetch("https://itransition-task6-backend.onrender.com/boards", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -41,7 +41,7 @@ const BoardList = ({ nickname }) => {
 
   const deleteBoard = async (boardId) => {
     try {
-      await fetch(`http://localhost:3000/boards/${boardId}`, {
+      await fetch(`https://itransition-task6-backend.onrender.com/boards/${boardId}`, {
         method: "DELETE",
       });
       setBoards(boards.filter((board) => board._id !== boardId));
@@ -57,7 +57,7 @@ const BoardList = ({ nickname }) => {
 
   const updateBoardName = async (boardId) => {
     try {
-      const response = await fetch(`http://localhost:3000/boards/${boardId}`, {
+      const response = await fetch(`https://itransition-task6-backend.onrender.com/boards/${boardId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +75,6 @@ const BoardList = ({ nickname }) => {
     }
   };
 
-  // This function navigates to the selected board
   const onSelectBoard = (boardId) => {
     navigate(`/board/${boardId}`);
   };
@@ -105,7 +104,6 @@ const BoardList = ({ nickname }) => {
                 </>
               ) : (
                 <>
-                  {/* Using onClick with navigate instead of Link's to property for onSelectBoard */}
                   <span
                     onClick={() => onSelectBoard(board._id)}
                     style={{ cursor: "pointer", textDecoration: "underline" }}
