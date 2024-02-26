@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 import "./drawingboard.css";
 import "bootstrap/dist/css/bootstrap.css";
-import context from "react-bootstrap/esm/AccordionContext";
 
 const DrawingBoard = ({ boardId }) => {
   const navigate = useNavigate();
@@ -113,7 +112,7 @@ const draw = (e) => {
     debounce((drawing) => {
       socketRef.current.emit("draw", drawing);
     }, 10),
-    []
+    [socketRef.current]
   );
 
   const stopDrawing = () => {
